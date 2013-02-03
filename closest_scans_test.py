@@ -34,3 +34,6 @@ class TestClosestScans(TestCase):
                     (2, u'B05-215', datetime(2008, 10, 6))]
         entries = closest_scans.parse_excel('data/example.xls')
         assert_equal(entries, expected)
+
+    def test_process_excel(self):
+        pass 
