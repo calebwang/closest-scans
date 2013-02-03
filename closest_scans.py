@@ -34,7 +34,8 @@ def find_closest(filelist, ref_date = datetime.now()):
     return closest
 
 def parse_excel(filename):
-    df = pandas.ExcelFile(filename).parse('Sheet1')
+    ef = pandas.ExcelFile(filename)
+    df = ef.parse(ef.sheet_names[0])
     cols = df.columns
     #verify correct column structure
     entries = df.to_records().tolist()
