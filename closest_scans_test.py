@@ -2,7 +2,7 @@ from unittest import TestCase, skipIf, skipUnless
 from numpy.testing import (assert_raises, assert_equal, assert_almost_equal)
 import os
 import closest_scans
-from datetime import datetime
+from datetime import datetime, date
 import pandas
 
 class TestClosestScans(TestCase):
@@ -42,7 +42,7 @@ class TestClosestScans(TestCase):
         closest_scans.process_excel(infile, outfile, 'data', 'FAKEFDG') 
         df = pandas.ExcelFile(outfile).parse('Sheet1')
         entry = df.to_records().tolist()[0]
-        expected = (0, u'B99-999', u'data/B99-999/FAKEFDG_2012-3-4', u'2012-03-04 00:00:00', u'2012-04-05 00:00:00', 32.0)
+        expected = (0, u'B99-999', u'data/B99-999/FAKEFDG_2012-3-4', u'2012-03-04', u'2012-04-05', 32.0)
         assert_equal(entry, expected)
         if os.path.exists(outfile):
            os.remove(outfile) 

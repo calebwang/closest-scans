@@ -81,7 +81,7 @@ def process_excel(infile, outfile, data_dir, scan_type):
     for entry in entries:
         closest = get_closest(data_dir, entry[1], scan_type, entry[2])
         fileloc, tdelta = closest[0], closest[1]
-        line = (parse_id(fileloc), fileloc, str(parse_date(fileloc)), str(entry[2]), tdelta)
+        line = (parse_id(fileloc), fileloc, str(parse_date(fileloc).date()), str(entry[2].date()), tdelta)
         lines.append(line)
     df = pandas.DataFrame(lines, columns = ['lbnl id', 'file path', 'scan date', 'target date', 'time delta'])
     df.to_excel(outfile, sheet_name = 'Sheet1', index = False)
