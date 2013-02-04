@@ -25,7 +25,11 @@ def parse_date(filename):
     return date
 
 def parse_id(filename):
-    return re.search('B[0-9]{2}-[0-9]{3}', filename).group() 
+    """Grabs LBNL ID from filename"""
+    match = re.search('B[0-9]{2}-[0-9]{3}', filename) 
+    if match:
+        return match.group()
+    return None
     
 def date_delta(dt1, dt2):
     """gets dt2 - dt1 in days"""
@@ -61,6 +65,8 @@ def parse_excel(filename):
     #verify correct column structure here
     #expect [lbnl id, date]
     entries = df.to_records().tolist()
+    if not parse_id(entries[0][1]) and type(entries[0][2] == datetime.datetime):
+        raise TypeError('Infile columns should be in format [lbnl id, date]')
     return entries
 
 def timestamp(filename):
@@ -69,7 +75,7 @@ def timestamp(filename):
                                              .split('.')[0] + ext
 
 def process_excel(infile, outfile, data_dir, scan_type):
-    """Write output to outfile for each entry in infile"""
+    """Process and write output to outfile for each entry in infile"""
     entries = parse_excel(infile)
     lines = []
     for entry in entries:
