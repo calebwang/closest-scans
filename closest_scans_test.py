@@ -3,6 +3,7 @@ from numpy.testing import (assert_raises, assert_equal, assert_almost_equal)
 import os
 import closest_scans
 from datetime import datetime
+import pandas
 
 class TestClosestScans(TestCase):
     def test_get_scans(self):
@@ -36,4 +37,12 @@ class TestClosestScans(TestCase):
         assert_equal(entries, expected)
 
     def test_process_excel(self):
-        pass 
+        infile = os.path.join('data', 'test.xls')
+        outfile = os.path.join('data', 'output.xls')
+        closest_scans.process_excel(infile, outfile, 'data', 'FAKEFDG') 
+        df = pandas.ExcelFile(outfile).parse('Sheet1')
+        entry = df.to_records().tolist()[0]
+        expected = (0, u'B99-999', u'data/B99-999/FAKEFDG_2012-3-4', u'2012-03-04 00:00:00', 32.0)
+        assert_equal(entry, expected)
+        if os.path.exists(outfile):
+           os.remove(outfile) 

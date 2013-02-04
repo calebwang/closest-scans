@@ -48,6 +48,7 @@ def get_closest(data_dir, id, scan_type, ref_date = datetime.now()):
     """Gets the closest scan_type scan under data_dir/id"""
     if not data_dir:
         data_dir = os.getcwd()
+    print data_dir
     scans = get_scans(data_dir, id, scan_type)
     closest = find_closest(scans, ref_date)
     return closest
@@ -67,12 +68,12 @@ def timestamp(filename):
     return name + '_' + str(datetime.today()).replace(' ', '-') \
                                              .split('.')[0] + ext
 
-def process_excel(infile, outfile, scan_type):
+def process_excel(infile, outfile, data_dir, scan_type):
     """Write output to outfile for each entry in infile"""
-    entries = parse_excel(filename)
+    entries = parse_excel(infile)
     lines = []
     for entry in entries:
-        closest = get_closest('.', entry[1], scan_type)
+        closest = get_closest(data_dir, entry[1], scan_type, entry[2])
         fileloc, tdelta = closest[0], closest[1]
         line = (parse_id(fileloc), fileloc, str(parse_date(fileloc)), tdelta)
         lines.append(line)
