@@ -65,7 +65,7 @@ def parse_excel(filename):
     #verify correct column structure here
     #expect [lbnl id, date]
     entries = df.to_records().tolist()
-    if not parse_id(entries[0][1]) and type(entries[0][2] == datetime.datetime):
+    if not (parse_id(entries[0][1]) and type(entries[0][2]) == datetime):
         raise TypeError('Infile columns should be in format [lbnl id, date]')
     return entries
 
