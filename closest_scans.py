@@ -66,9 +66,19 @@ def parse_excel(filename):
     #expect [lbnl id, date]
     #entries = df.to_records().tolist()
     entries = df.values
-    if not (parse_id(entries[0][0]) and type(entries[0][1]) == datetime):
-        raise TypeError('Infile columns should be in format [lbnl id, date]')
-    return entries
+    processed_entries = []
+    for entry in entries:
+        if (parse_id(entry[0]) and type(entry[1]) == datetime):
+            processed_entries.append(entry)
+        else:
+            date = re.search('[0-9]{2}/[0-9]{2}/[0-9]{4}', entry[1]) 
+            if date:
+                new_entry = [entry[0], datetime.strptime(date.group(), '%m/%d/%Y')]
+                processed_entries.append(new_entry)
+            else:
+                print entries[0]
+
+    return processed_entries
 
 def timestamp(filename):
     name, ext = splitext(filename)
