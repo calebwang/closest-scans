@@ -64,8 +64,9 @@ def parse_excel(filename):
     cols = df.columns
     #verify correct column structure here
     #expect [lbnl id, date]
-    entries = df.to_records().tolist()
-    if not (parse_id(entries[0][1]) and type(entries[0][2]) == datetime):
+    #entries = df.to_records().tolist()
+    entries = df.values
+    if not (parse_id(entries[0][0]) and type(entries[0][1]) == datetime):
         raise TypeError('Infile columns should be in format [lbnl id, date]')
     return entries
 
@@ -79,12 +80,12 @@ def process_excel(infile, outfile, data_dir, scan_type):
     entries = parse_excel(infile)
     lines = []
     for entry in entries:
-        closest = get_closest(data_dir, entry[1], scan_type, entry[2])
+        closest = get_closest(data_dir, entry[0], scan_type, entry[1])
         if closest == None:
-            line = (entry[1], 'no %s found'%scan_type, '', '', '')
+            line = (entry[0], 'no %s found'%scan_type, '', '', '')
         else:
             fileloc, tdelta = closest[0], closest[1]
-            line = (parse_id(fileloc), fileloc, str(parse_date(fileloc).date()), str(entry[2].date()), tdelta)
+            line = (parse_id(fileloc), fileloc, str(parse_date(fileloc).date()), str(entry[1].date()), tdelta)
         lines.append(line)
     df = pandas.DataFrame(lines, columns = ['lbnl id', 'file path', 'scan date', 'target date', 'time delta'])
     df.to_excel(outfile, sheet_name = 'Sheet1', index = False)

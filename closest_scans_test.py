@@ -30,9 +30,9 @@ class TestClosestScans(TestCase):
         assert_equal(closest, ('data/B99-999/FAKEFDG_2012-3-4', 31))
 
     def test_parse_excel(self):
-        expected = [(0, u'B05-201', datetime(2009, 3, 23)), \
-                    (1, u'B05-202', datetime(2009, 6, 2)), \
-                    (2, u'B05-215', datetime(2008, 10, 6))]
+        expected = [(u'B05-201', datetime(2009, 3, 23)), \
+                    (u'B05-202', datetime(2009, 6, 2)), \
+                    (u'B05-215', datetime(2008, 10, 6))]
         entries = closest_scans.parse_excel('data/example.xls')
         assert_equal(entries, expected)
 
