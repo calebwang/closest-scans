@@ -52,7 +52,6 @@ def get_closest(data_dir, id, scan_type, ref_date = datetime.now()):
     """Gets the closest scan_type scan under data_dir/id"""
     if not data_dir:
         data_dir = os.getcwd()
-    print data_dir
     scans = get_scans(data_dir, id, scan_type)
     closest = find_closest(scans, ref_date)
     return closest
@@ -76,7 +75,7 @@ def parse_excel(filename):
                 new_entry = [entry[0], datetime.strptime(date.group(), '%m/%d/%Y')]
                 processed_entries.append(new_entry)
             else:
-                print entries[0]
+                print 'Throwing out: ' + entry
 
     return processed_entries
 
@@ -97,6 +96,6 @@ def process_excel(infile, outfile, data_dir, scan_type):
             fileloc, tdelta = closest[0], closest[1]
             line = (parse_id(fileloc), fileloc, str(parse_date(fileloc).date()), str(entry[1].date()), tdelta)
         lines.append(line)
-    df = pandas.DataFrame(lines, columns = ['lbnl id', 'file path', 'scan date', 'target date', 'time delta'])
+    df = pandas.DataFrame(lines, columns = ['lbnl id', 'scan filepath', 'scan date', 'target date', 'date delta'])
     df.to_excel(outfile, sheet_name = 'Sheet1', index = False)
 
